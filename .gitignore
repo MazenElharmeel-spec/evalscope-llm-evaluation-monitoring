@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+*.py[cod]
+.venv/
+__pycache__/
+.pytest_cache/
+data/*.sqlite3
+/output/pdf/
+/tmp/

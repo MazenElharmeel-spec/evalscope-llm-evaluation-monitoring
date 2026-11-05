@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.DS_Store
+tmp
+output
+__pycache__
+.pytest_cache
+*.py[cod]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rag-security",
+    "title": "RAG Security Basics",
+    "content": "A retrieval-augmented generation system should ground responses in retrieved passages and show the source document for each factual answer. If the retrieved passages do not support an answer, the assistant should abstain instead of inventing details. Prompt injection can appear inside retrieved documents, so treat retrieved text as untrusted data rather than as instructions. Keep access controls outside the language model and enforce them before retrieval."
+  },
+  {
+    "id": "rag-evaluation",
+    "title": "Evaluating Retrieval Systems",
+    "content": "Recall at k measures the fraction of relevant source documents found in the first k retrieved results. Precision at k measures the fraction of the first k results that are relevant. Mean reciprocal rank rewards systems that return the first relevant result near the top. A useful evaluation set includes questions, reference answers, and expected source document identifiers. Retrieval metrics can be computed without an LLM judge."
+  },
+  {
+    "id": "api-operations",
+    "title": "Operating the Demo API",
+    "content": "The EvalScope demo API exposes a health check at /healthz, document endpoints under /api/v1/documents, retrieval at /api/v1/search, grounded answers at /api/v1/chat, and retrieval evaluation at /api/v1/evaluate. The demo stores documents and chunks in SQLite. The default corpus contains public example content and no credentials. Run the project with Docker Compose or start the FastAPI server locally."
+  },
+  {
+    "id": "privacy-guidance",
+    "title": "Privacy and Data Handling",
+    "content": "Do not put passwords, access tokens, or private customer records in the bundled sample corpus. Before indexing user-provided material, confirm the organization has permission to process it and apply the project's retention policy. The demo has no authentication, encryption-at-rest configuration, or production retention controls, so do not expose it to the public internet or use it with confidential data."
+  }
+]

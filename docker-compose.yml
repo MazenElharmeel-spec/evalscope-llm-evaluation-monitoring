@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_PATH: /var/lib/evalscope/evalscope.sqlite3
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - evalscope-data:/var/lib/evalscope
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "4173:80"
+
+volumes:
+  evalscope-data:
