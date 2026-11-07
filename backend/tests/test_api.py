@@ -2,7 +2,10 @@ def test_health_and_seeded_documents(client) -> None:
     assert client.get("/healthz").json() == {"status": "ok", "mode": "local-demo"}
     documents = client.get("/api/v1/documents").json()
     assert {document["id"] for document in documents} == {
-        "rag-security", "rag-evaluation", "api-operations", "privacy-guidance"
+        "rag-security",
+        "rag-evaluation",
+        "api-operations",
+        "privacy-guidance",
     }
 
 
@@ -27,7 +30,11 @@ def test_chat_abstains_when_no_passage_matches(client) -> None:
 
 
 def test_document_ingestion_is_persisted_and_duplicate_id_is_rejected(client) -> None:
-    document = {"id": "new-guide", "title": "New Guide", "content": "The demo stores documents in SQLite."}
+    document = {
+        "id": "new-guide",
+        "title": "New Guide",
+        "content": "The demo stores documents in SQLite.",
+    }
     created = client.post("/api/v1/documents", json=document)
     assert created.status_code == 201
     assert created.json()["chunk_count"] == 1
@@ -38,7 +45,15 @@ def test_document_ingestion_is_persisted_and_duplicate_id_is_rejected(client) ->
 def test_evaluation_uses_reference_source_ids(client) -> None:
     response = client.post(
         "/api/v1/evaluate",
-        json={"cases": [{"id": "recall", "question": "What is recall at k?", "expected_source_ids": ["rag-evaluation"]}]},
+        json={
+            "cases": [
+                {
+                    "id": "recall",
+                    "question": "What is recall at k?",
+                    "expected_source_ids": ["rag-evaluation"],
+                }
+            ]
+        },
     )
     assert response.status_code == 200
     result = response.json()

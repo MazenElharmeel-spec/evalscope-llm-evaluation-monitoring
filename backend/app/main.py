@@ -56,7 +56,9 @@ def run_cases(cases: list[EvalCase], top_k: int) -> EvalOut:
         ids = list(dict.fromkeys(passage.document_id for passage, _ in found))
         relevant = set(case.expected_source_ids)
         hits = [source_id for source_id in ids if source_id in relevant]
-        first_rank = next((rank for rank, source_id in enumerate(ids, 1) if source_id in relevant), None)
+        first_rank = next(
+            (rank for rank, source_id in enumerate(ids, 1) if source_id in relevant), None
+        )
         results.append(
             EvalCaseResult(
                 id=case.id,
@@ -95,14 +97,18 @@ def create_document(document: DocumentIn) -> dict[str, str | int]:
     try:
         chunk_count = storage.add_document(document.id, document.title, document.content)
     except sqlite3.IntegrityError as exc:
-        raise HTTPException(status_code=409, detail="A document with this id already exists") from exc
+        raise HTTPException(
+            status_code=409, detail="A document with this id already exists"
+        ) from exc
     return {"id": document.id, "title": document.title, "chunk_count": chunk_count}
 
 
 @app.post("/api/v1/search", response_model=SearchOut, tags=["retrieval"])
 def search(request: SearchRequest) -> SearchOut:
     found = retrieve(request.query, storage.all_passages(), top_k=request.top_k)
-    return SearchOut(query=request.query, results=[evidence(passage, score) for passage, score in found])
+    return SearchOut(
+        query=request.query, results=[evidence(passage, score) for passage, score in found]
+    )
 
 
 @app.post("/api/v1/chat", response_model=ChatOut, tags=["assistant"])
@@ -129,7 +135,10 @@ def evaluate(request: EvalRequest) -> EvalOut:
     cases = request.cases
     if cases is None:
         golden_path = Path(os.getenv("GOLDEN_DATASET_PATH", "data/golden_cases.json"))
-        cases = [EvalCase.model_validate(case) for case in json.loads(golden_path.read_text(encoding="utf-8"))]
+        cases = [
+            EvalCase.model_validate(case)
+            for case in json.loads(golden_path.read_text(encoding="utf-8"))
+        ]
     if not cases:
         raise HTTPException(status_code=422, detail="Provide at least one evaluation case")
     return run_cases(cases, request.top_k)

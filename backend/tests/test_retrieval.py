@@ -2,7 +2,13 @@ from app.retrieval import Passage, bm25_scores, retrieve, split_chunks, tokenize
 
 
 def test_tokenize_normalizes_case_and_punctuation() -> None:
-    assert tokenize("RAG, Recall@k and grounded answers!") == ["rag", "recall", "k", "grounded", "answers"]
+    assert tokenize("RAG, Recall@k and grounded answers!") == [
+        "rag",
+        "recall",
+        "k",
+        "grounded",
+        "answers",
+    ]
 
 
 def test_split_chunks_keeps_sentences_and_respects_limit() -> None:
@@ -12,7 +18,9 @@ def test_split_chunks_keeps_sentences_and_respects_limit() -> None:
 
 
 def test_bm25_ranks_matching_passage_above_unrelated_passage() -> None:
-    scores = bm25_scores("retrieval recall", ["recall measures relevant retrieval", "the weather is sunny"])
+    scores = bm25_scores(
+        "retrieval recall", ["recall measures relevant retrieval", "the weather is sunny"]
+    )
     assert scores[0] > scores[1] == 0
 
 

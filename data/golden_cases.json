@@ -1,10 +1,42 @@
 [
-  {"id":"grounding","question":"How should an answer be grounded?","expected_source_ids":["rag-security"]},
-  {"id":"abstention","question":"What should the assistant do if evidence does not support an answer?","expected_source_ids":["rag-security"]},
-  {"id":"injection","question":"How should retrieved prompt injection be treated?","expected_source_ids":["rag-security"]},
-  {"id":"recall","question":"What does recall at k measure?","expected_source_ids":["rag-evaluation"]},
-  {"id":"precision","question":"What does precision at k measure?","expected_source_ids":["rag-evaluation"]},
-  {"id":"mrr","question":"How is mean reciprocal rank useful?","expected_source_ids":["rag-evaluation"]},
-  {"id":"endpoints","question":"Which endpoint returns grounded answers?","expected_source_ids":["api-operations"]},
-  {"id":"privacy","question":"Can I use the demo with confidential customer records?","expected_source_ids":["privacy-guidance"]}
+  {
+    "id": "grounding",
+    "question": "How should an answer be grounded?",
+    "expected_source_ids": ["rag-security"]
+  },
+  {
+    "id": "abstention",
+    "question": "What should the assistant do if evidence does not support an answer?",
+    "expected_source_ids": ["rag-security"]
+  },
+  {
+    "id": "injection",
+    "question": "How should retrieved prompt injection be treated?",
+    "expected_source_ids": ["rag-security"]
+  },
+  {
+    "id": "recall",
+    "question": "What does recall at k measure?",
+    "expected_source_ids": ["rag-evaluation"]
+  },
+  {
+    "id": "precision",
+    "question": "What does precision at k measure?",
+    "expected_source_ids": ["rag-evaluation"]
+  },
+  {
+    "id": "mrr",
+    "question": "How is mean reciprocal rank useful?",
+    "expected_source_ids": ["rag-evaluation"]
+  },
+  {
+    "id": "endpoints",
+    "question": "Which endpoint returns grounded answers?",
+    "expected_source_ids": ["api-operations"]
+  },
+  {
+    "id": "privacy",
+    "question": "Can I use the demo with confidential customer records?",
+    "expected_source_ids": ["privacy-guidance"]
+  }
 ]

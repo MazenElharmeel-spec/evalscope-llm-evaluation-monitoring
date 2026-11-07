@@ -50,10 +50,15 @@ def initialize(db_path: Path | None = None, corpus_path: Path | None = None) -> 
 
 def insert_document(db: sqlite3.Connection, document_id: str, title: str, content: str) -> int:
     chunks = split_chunks(content)
-    db.execute("INSERT INTO documents(id, title, content) VALUES(?, ?, ?)", (document_id, title, content))
+    db.execute(
+        "INSERT INTO documents(id, title, content) VALUES(?, ?, ?)", (document_id, title, content)
+    )
     db.executemany(
         "INSERT INTO chunks(id, document_id, position, text) VALUES(?, ?, ?, ?)",
-        [(f"{document_id}-{index + 1}", document_id, index, chunk) for index, chunk in enumerate(chunks)],
+        [
+            (f"{document_id}-{index + 1}", document_id, index, chunk)
+            for index, chunk in enumerate(chunks)
+        ],
     )
     return len(chunks)
 

@@ -8,16 +8,49 @@ from collections import Counter
 from dataclasses import dataclass
 
 TOKEN_RE = re.compile(r"[a-z0-9]+(?:['’-][a-z0-9]+)?", re.IGNORECASE)
-STOPWORDS = {"a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "how", "i", "in", "is", "it", "of", "on", "or", "should", "the", "to", "what", "when", "where", "which", "who", "why", "with"}
+STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "how",
+    "i",
+    "in",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "should",
+    "the",
+    "to",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "why",
+    "with",
+}
 
 
 def tokenize(text: str) -> list[str]:
-    return [token.casefold() for token in TOKEN_RE.findall(text) if token.casefold() not in STOPWORDS]
+    return [
+        token.casefold() for token in TOKEN_RE.findall(text) if token.casefold() not in STOPWORDS
+    ]
 
 
 def split_chunks(text: str, max_chars: int = 520) -> list[str]:
     """Split plain text on sentence boundaries, packing sentences up to max_chars."""
-    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+|\n+", text.strip()) if part.strip()]
+    sentences = [
+        part.strip() for part in re.split(r"(?<=[.!?])\s+|\n+", text.strip()) if part.strip()
+    ]
     chunks: list[str] = []
     current = ""
     for sentence in sentences:
@@ -25,7 +58,9 @@ def split_chunks(text: str, max_chars: int = 520) -> list[str]:
             if current:
                 chunks.append(current)
                 current = ""
-            chunks.extend(sentence[index : index + max_chars] for index in range(0, len(sentence), max_chars))
+            chunks.extend(
+                sentence[index : index + max_chars] for index in range(0, len(sentence), max_chars)
+            )
             continue
         candidate = f"{current} {sentence}".strip()
         if len(candidate) > max_chars and current:
@@ -46,7 +81,9 @@ class Passage:
     text: str
 
 
-def bm25_scores(query: str, documents: list[str], *, k1: float = 1.5, b: float = 0.75) -> list[float]:
+def bm25_scores(
+    query: str, documents: list[str], *, k1: float = 1.5, b: float = 0.75
+) -> list[float]:
     """Return BM25 scores in input order; empty queries and corpora score zero."""
     query_terms = tokenize(query)
     tokenized = [tokenize(document) for document in documents]
@@ -79,5 +116,7 @@ def retrieve(query: str, passages: list[Passage], *, top_k: int = 3) -> list[tup
     if top_k < 1:
         raise ValueError("top_k must be at least 1")
     scores = bm25_scores(query, [passage.text for passage in passages])
-    ranked = sorted(zip(passages, scores, strict=True), key=lambda item: (-item[1], item[0].chunk_id))
+    ranked = sorted(
+        zip(passages, scores, strict=True), key=lambda item: (-item[1], item[0].chunk_id)
+    )
     return [(passage, score) for passage, score in ranked if score > 0][:top_k]
